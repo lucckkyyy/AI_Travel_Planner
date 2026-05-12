@@ -1,7 +1,7 @@
 # ✈️ AI Travel Planner
 ## 📘 Building a Full LLMOps Travel Planning Pipeline
 
-I built this project to go beyond basic LLM applications and understand what a complete LLMOps pipeline looks like in practice. Most AI projects stop at "generate a response" — this one adds real-time search, output quality evaluation, and structured observability logging, making it a production-grade system rather than a demo.
+I built this project to go beyond basic LLM applications and understand what a complete LLMOps pipeline looks like in practice. Most AI projects stop at "generate a response"- this one adds real-time search, output quality evaluation, and structured observability logging, making it a production-grade system rather than a demo.
 
 The travel planner takes a destination, trip duration, and travel style, then runs a LangGraph agent that searches for current destination information, generates a detailed day-by-day itinerary, evaluates its own output quality using DeepEval, and logs every step to an ELK stack for observability.
 
@@ -11,7 +11,7 @@ The travel planner takes a destination, trip duration, and travel style, then ru
 
 ### **Timeline & Approach**
 - **Duration**: Built as part of a structured AI engineering portfolio series
-- **Process**: Built each layer independently — agent first, then evaluation, then logging — before wiring them together
+- **Process**: Built each layer independently agent first, then evaluation, then logging before wiring them together
 - **Focus**: LLMOps pipeline design, real-time search integration, LLM evaluation, and production observability
 
 ---
@@ -28,7 +28,7 @@ The travel planner takes a destination, trip duration, and travel style, then ru
 - Using **DeepEval** to measure itinerary quality programmatically
 - Implementing `AnswerRelevancyMetric` to score how well the output matches the input
 - Building a heuristic fallback scorer for environments where DeepEval isn't fully configured
-- Understanding why LLM evaluation matters in production — you can't improve what you don't measure
+- Understanding why LLM evaluation matters in production you can't improve what you don't measure
 
 ### **ELK Stack Observability**
 - Designing structured **JSON logging** using `python-json-logger`
@@ -111,7 +111,7 @@ Cloud Run → Docker container → GitHub Actions CI/CD
 | Layer | Technology |
 |---|---|
 | Agent Framework | LangGraph |
-| LLM | Groq — llama-3.1-8b-instant (free) |
+| LLM | Groq llama-3.1-8b-instant (free) |
 | Search | DuckDuckGo (free, no API key) |
 | Evaluation | DeepEval |
 | Observability | ELK Stack (Elasticsearch + Kibana) |
@@ -154,7 +154,7 @@ ai-travel-planner/
 
 This project taught me that production AI systems need three things beyond just a working LLM call: evaluation (how good is the output?), observability (what happened during generation?), and deployment (how does it run in the real world?).
 
-Building the DeepEval integration made me think carefully about what "good" means for an AI-generated itinerary — relevancy, completeness, coherence. The ELK logging taught me how to instrument an AI pipeline so that every request is traceable. And the GCP Cloud Run config showed me how to take a local Docker container to a globally accessible serverless endpoint.
+Building the DeepEval integration made me think carefully about what "good" means for an AI-generated itinerary relevancy, completeness, coherence. The ELK logging taught me how to instrument an AI pipeline so that every request is traceable. And the GCP Cloud Run config showed me how to take a local Docker container to a globally accessible serverless endpoint.
 
 ---
 
