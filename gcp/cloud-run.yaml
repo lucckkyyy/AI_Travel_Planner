@@ -1,0 +1,34 @@
+# GCP Cloud Run deployment configuration
+# Deploy with: gcloud run deploy --region=us-central1
+
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: ai-travel-planner
+  annotations:
+    run.googleapis.com/ingress: all
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/maxScale: "10"
+        run.googleapis.com/cpu-throttling: "false"
+    spec:
+      containerConcurrency: 10
+      timeoutSeconds: 120
+      containers:
+        - image: gcr.io/PROJECT_ID/ai-travel-planner-backend:latest
+          ports:
+            - containerPort: 8000
+          env:
+            - name: GROQ_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: groq-api-key
+                  key: latest
+            - name: APP_ENV
+              value: production
+          resources:
+            limits:
+              cpu: "2"
+              memory: "1Gi"

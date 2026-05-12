@@ -1,0 +1,40 @@
+name: CI/CD — AI Travel Planner
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -r backend/requirements.txt flake8
+      - run: flake8 backend/ --max-line-length=120 --exclude=__pycache__
+
+  deploy-gcp:
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+      - uses: google-github-actions/setup-gcloud@v2
+      - name: Build and push to GCR
+        run: |
+          gcloud builds submit ./backend \
+            --tag gcr.io/${{ secrets.GCP_PROJECT_ID }}/ai-travel-planner-backend:latest
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy ai-travel-planner \
+            --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/ai-travel-planner-backend:latest \
+            --region us-central1 \
+            --platform managed \
+            --allow-unauthenticated
